@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from scipy.stats import norm
 import pandas as pd
 
@@ -64,22 +65,22 @@ class StochasticProcess:
     
     def visualize_process(self, simulations):
         plt.figure(figsize=(10, 6))
+        sns.set_style("whitegrid")
         for path in simulations:
-            plt.plot(path, alpha=0.6)
+            sns.lineplot(x=range(len(path)), y=path, alpha=0.6)
         plt.title(f"{self.process_type} Simulation ({self.n} paths)")
         plt.xlabel("Time step")
         plt.ylabel("Value")
-        plt.grid()
         plt.show()
 
     def visualize_mc_analysis(self, simulations):
         final_values = [path[-1] for path in simulations]
         plt.figure(figsize=(10, 6))
-        plt.hist(final_values, bins=30, alpha=0.7)
+        sns.set_style("whitegrid")
+        sns.histplot(final_values, bins=30, kde=True, alpha=0.7)
         plt.title(f"Monte Carlo Analysis of {self.process_type} Final Values")
         plt.xlabel("Final Value")
         plt.ylabel("Frequency")
-        plt.grid()
         plt.show()
 
     def mc_analysis(self, simulations):
@@ -90,7 +91,9 @@ class StochasticProcess:
         return mean, std_dev, conf_int
     
     def import_data(self, filepath, header = True, parse_dates = True):
-        self.data = pd.read_csv(file_path, header=header, parse_dates=parse_dates)
+        self.data = pd.read_csv(filepath, header=header, parse_dates=parse_dates)
+
+    
 
 # Example usage:
 if __name__ == "__main__":
